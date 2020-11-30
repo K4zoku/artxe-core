@@ -1,0 +1,4 @@
+name: Artxe
+version: ${project.version}
+authors: [kazoku]
+main: me.kazoku.artxe.plugin.ArtxePlugin
