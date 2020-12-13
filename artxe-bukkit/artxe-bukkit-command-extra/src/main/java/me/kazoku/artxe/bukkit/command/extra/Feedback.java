@@ -1,5 +1,7 @@
 package me.kazoku.artxe.bukkit.command.extra;
 
+import org.bukkit.command.CommandSender;
+
 import java.util.function.Supplier;
 
 public class Feedback implements Cloneable {
@@ -33,5 +35,9 @@ public class Feedback implements Cloneable {
      */
     public void setFeedback(String feedback) {
         setFeedback(() -> feedback);
+    }
+
+    public void send(CommandSender sender) {
+        sender.sendMessage(getFeedback());
     }
 }

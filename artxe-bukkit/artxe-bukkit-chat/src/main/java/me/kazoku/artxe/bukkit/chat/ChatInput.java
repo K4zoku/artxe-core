@@ -8,6 +8,7 @@ import org.bukkit.plugin.Plugin;
 
 import java.util.*;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 public final class ChatInput {
 
@@ -20,7 +21,7 @@ public final class ChatInput {
      *       Predicate: Call while run, return value used for {@link AsyncPlayerChatEvent#setCancelled)}
      */
     private final Map<UUID, Queue<Predicate<String>>> handlers;
-    // todo: unregister
+    private final Map<UUID, Queue<Supplier<String>>> preHandlers;
     private final EventHandlerManager manager;
     private final List<UUID> registeredListener;
 
@@ -30,6 +31,7 @@ public final class ChatInput {
 
     public ChatInput(Plugin plugin, boolean clearQueueOnQuit) {
         handlers = new HashMap<>();
+        preHandlers = new HashMap<>();
         registeredListener = new ArrayList<>();
         manager = EventHandlerManager.getInstance(plugin);
         registeredListener.add(manager.addEventHandler(AsyncPlayerChatEvent.class, this::onChat));
@@ -37,12 +39,12 @@ public final class ChatInput {
 
     }
 
-    public ChatInputChain getPlayerInput(UUID player, boolean cancel) {
+    public ChatInputChain newChain(UUID player, boolean cancel) {
         return new ChatInputChain(player, cancel, this);
     }
 
-    public ChatInputChain getPlayerInput(Player player) {
-        return getPlayerInput(player.getUniqueId(), true);
+    public ChatInputChain newChain(Player player) {
+        return newChain(player.getUniqueId(), true);
     }
 
     public void clearInputQueue(UUID player) {
@@ -61,6 +63,10 @@ public final class ChatInput {
 
     Map<UUID, Queue<Predicate<String>>> getHandlers() {
         return handlers;
+    }
+
+    Map<UUID, Queue<Supplier<String>>> getPreHandlers() {
+        return preHandlers;
     }
 
     public void unregister() {

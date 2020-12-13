@@ -12,8 +12,8 @@ import org.jetbrains.annotations.Nullable;
  */
 public abstract class AdvancedConfigPath<F, T> implements ConfigPath<T> {
 
-  private final String path;
-  private final T def;
+  protected final String path;
+  protected final T def;
   private Config config;
 
   /**
@@ -22,7 +22,7 @@ public abstract class AdvancedConfigPath<F, T> implements ConfigPath<T> {
    * @param path the path to the value
    * @param def  the default value if it's not found
    */
-  public AdvancedConfigPath(@NotNull final String path, @Nullable final T def) {
+  public AdvancedConfigPath(@NotNull final String path, @NotNull final T def) {
     this.path = path;
     this.def = def;
   }
@@ -58,8 +58,7 @@ public abstract class AdvancedConfigPath<F, T> implements ConfigPath<T> {
   public abstract F convertToRaw(@NotNull final T value);
 
   @Override
-  @Nullable
-  public T getValue() {
+  public @NotNull T getValue() {
     if (config == null) {
       return def;
     }
@@ -97,6 +96,6 @@ public abstract class AdvancedConfigPath<F, T> implements ConfigPath<T> {
   @Override
   public void setConfig(@NotNull final Config config) {
     this.config = config;
-    config.getConfig().addDefault(path, def != null ? convertToRaw(def) : null);
+    config.getConfig().addDefault(path, convertToRaw(def));
   }
 }

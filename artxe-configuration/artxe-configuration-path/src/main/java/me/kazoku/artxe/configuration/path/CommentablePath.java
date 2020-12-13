@@ -5,7 +5,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.simpleyaml.configuration.comments.CommentType;
 import org.simpleyaml.configuration.comments.Commentable;
-import org.simpleyaml.configuration.file.FileConfiguration;
 
 import java.util.EnumMap;
 import java.util.Optional;
@@ -28,17 +27,12 @@ public class CommentablePath<T> implements ConfigPath<T> {
   public CommentablePath(@NotNull final ConfigPath<T> originalPath, @NotNull final String... defaultComments) {
     this.originalPath = originalPath;
 
-    if (defaultComments.length > 1) {
-      defaultCommentMap.put(CommentType.BLOCK, defaultComments[0]);
-    }
-
-    if (defaultComments.length > 2) {
-      defaultCommentMap.put(CommentType.SIDE, defaultComments[1]);
-    }
+    if (defaultComments.length > 0)
+      defaultCommentMap.put(CommentType.BLOCK, String.join("\n", defaultComments));
   }
 
   @Override
-  public @Nullable T getValue() {
+  public @NotNull T getValue() {
     return originalPath.getValue();
   }
 
@@ -60,15 +54,15 @@ public class CommentablePath<T> implements ConfigPath<T> {
   @Override
   public void setConfig(@NotNull final Config config) {
     originalPath.setConfig(config);
-    FileConfiguration configuration = config.getConfig();
-    if (!(configuration instanceof Commentable)) {
-      return;
-    }
-    defaultCommentMap.forEach((type, s) -> {
-      if (((Commentable) configuration).getComment(getPath(), type) == null) {
-        ((Commentable) configuration).setComment(getPath(), s, type);
-      }
-    });
+    Optional.of(config.getConfig())
+            .filter(Commentable.class::isInstance)
+            .map(Commentable.class::cast)
+            .ifPresent(configuration ->
+              defaultCommentMap.forEach((type, comment) -> {
+                if (configuration.getComment(getPath(), type) == null)
+                  configuration.setComment(getPath(), comment, type);
+              })
+            );
   }
 
   /**
@@ -101,8 +95,9 @@ public class CommentablePath<T> implements ConfigPath<T> {
   public String getComment(@NotNull final CommentType commentType) {
     return Optional.ofNullable(getConfig())
       .map(Config::getConfig)
-      .filter(config -> config instanceof Commentable)
-      .map(config -> ((Commentable) config).getComment(getPath(), commentType))
+      .filter(Commentable.class::isInstance)
+      .map(Commentable.class::cast)
+      .map(config -> config.getComment(getPath(), commentType))
       .orElse(defaultCommentMap.get(commentType));
   }
 
@@ -115,7 +110,8 @@ public class CommentablePath<T> implements ConfigPath<T> {
   public void setComment(@NotNull final CommentType commentType, @Nullable final String comment) {
     Optional.ofNullable(getConfig())
       .map(Config::getConfig)
-      .filter(config -> config instanceof Commentable)
-      .ifPresent(config -> ((Commentable) config).setComment(getPath(), comment, commentType));
+      .filter(Commentable.class::isInstance)
+      .map(Commentable.class::cast)
+      .ifPresent(config -> config.setComment(getPath(), comment, commentType));
   }
 }

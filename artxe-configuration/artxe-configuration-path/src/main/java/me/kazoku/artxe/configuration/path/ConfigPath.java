@@ -16,7 +16,7 @@ public interface ConfigPath<T> {
    *
    * @return the value
    */
-  @Nullable
+  @NotNull
   T getValue();
 
   /**

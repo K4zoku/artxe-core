@@ -3,10 +3,7 @@ package me.kazoku.artxe.bukkit.command.extra;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.BiPredicate;
 import java.util.stream.Collectors;
 
@@ -114,8 +111,9 @@ public interface CommandNode {
             current = found.get();
         }
         return current.subCommands().stream()
+                .filter(node -> node.permissions().stream().allMatch(sender::hasPermission))
                 .map(CommandNode::label)
-                .filter(token -> token.toLowerCase().startsWith(args[args.length-1]))
+                .filter(token -> token.toLowerCase().startsWith(args[args.length-1].toLowerCase()))
                 .collect(Collectors.toList());
     }
 
@@ -144,25 +142,25 @@ public interface CommandNode {
                 if (found.isPresent()) {
                     current = found.get();
                 } else {
-                    sender.sendMessage(feedback().INVALID_COMMAND.getFeedback()
-                            .replace("%arg%", currentArgs.length > 0 ? currentArgs[0] : ""));
+                    sender.sendMessage(current.feedback().INVALID_COMMAND.getFeedback()
+                            .replace("%arg%", label));
                     return false;
                 }
             }
         }
 
         if (current.onlyPlayer() && !(sender instanceof Player)) {
-            sender.sendMessage(feedback().ONLY_PLAYER.getFeedback());
+            current.feedback().ONLY_PLAYER.send(sender);
             return false;
         }
 
         if (!current.permissions().isEmpty() && current.permissions().stream().noneMatch(sender::hasPermission)) {
-            sender.sendMessage(feedback().NO_PERMISSION.getFeedback());
+            current.feedback().NO_PERMISSION.send(sender);
             return false;
         }
 
         if (currentArgs.length > 0 && !current.consume()) {
-            sender.sendMessage(feedback().TOO_MANY_ARGUMENTS.getFeedback());
+            current.feedback().TOO_MANY_ARGUMENTS.send(sender);
             return false;
         }
 

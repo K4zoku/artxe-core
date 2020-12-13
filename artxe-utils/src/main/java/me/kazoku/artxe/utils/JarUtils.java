@@ -1,5 +1,7 @@
 package me.kazoku.artxe.utils;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -8,10 +10,8 @@ import java.nio.charset.Charset;
 public class JarUtils {
     private JarUtils() {}
 
-    public static File traceTheSource(Class<?> context) throws ClassNotFoundException {
-        if (context == null) context = Class.forName(Thread.currentThread().getStackTrace()[2].getClassName());
+    public static File traceTheSource(@NotNull Class<?> context) {
         String rawName = context.getName();
-        /* rawName is something like package.name.ContainingClass$ClassName. We need to turn this into ContainingClass$ClassName.class. */
         String classFileName = String.format("%s.class",
                 rawName.contains(".")
                         ? rawName.substring(rawName.lastIndexOf('.') + 1)
@@ -27,10 +27,6 @@ public class JarUtils {
             throw new IllegalStateException(String.format("This class has been loaded remotely via the %s protocol. Only loading from a jar on the local file system is supported.", protocol));
         }
 
-        //As far as I know, the if statement below can't ever trigger, so it's more of a sanity check thing.
-        if (!uri.contains("!"))
-            throw new IllegalStateException("You appear to have loaded this class from a local jar file, but I can't make sense of the URL!");
-
         try {
             String fileName = URLDecoder.decode(uri.substring("jar:file:".length(), uri.indexOf('!')), Charset.defaultCharset().name());
             return new File(fileName);
@@ -38,4 +34,9 @@ public class JarUtils {
             throw new InternalError("Default charset doesn't exist. Your VM is borked.");
         }
     }
+    
+    public static File traceTheSource() {
+        return traceTheSource(ClassUtils.getCallerClass());
+    }
+    
 }

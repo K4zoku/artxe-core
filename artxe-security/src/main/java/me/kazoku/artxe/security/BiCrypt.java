@@ -13,7 +13,11 @@ import java.security.*;
 import java.security.spec.AlgorithmParameterSpec;
 import java.util.Arrays;
 import java.util.Base64;
+import java.util.Locale;
 import java.util.Random;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.StreamSupport;
 
 public class BiCrypt {
     private static Cipher cipher;
@@ -65,13 +69,13 @@ public class BiCrypt {
     private Key makeKey() {
         byte[] keyBytes = hash("MD5", this.key);
         keyBytes = Arrays.copyOfRange(keyBytes, 0, 16);
-        return new SecretKeySpec(DatatypeConverter.printHexBinary(keyBytes).toLowerCase().getBytes(), "AES");
+        return new SecretKeySpec(hexBinary(keyBytes).toLowerCase().getBytes(), "AES");
     }
 
     private AlgorithmParameterSpec makeIv() {
         byte[] ivBytes = hash("SHA-256", this.iv);
         ivBytes = Arrays.copyOfRange(ivBytes, 0, 8);
-        return new IvParameterSpec(DatatypeConverter.printHexBinary(ivBytes).toLowerCase().getBytes());
+        return new IvParameterSpec(hexBinary(ivBytes).toLowerCase().getBytes());
     }
 
     private static byte[] hash(String algorithm, String text){
@@ -81,5 +85,11 @@ public class BiCrypt {
         } catch (NoSuchAlgorithmException e) {
             throw new CryptError(e.getMessage());
         }
+    }
+
+    private static String hexBinary(byte[] val) {
+        StringBuilder sb = new StringBuilder();
+        for (byte b : val) sb.append(String.format("%02x", b));
+        return sb.toString();
     }
 }

@@ -15,6 +15,8 @@
         <module>artxe-utils</module>
         <module>artxe-database</module>
         <module>artxe-module</module>
+        <module>artxe-http</module>
+        <module>artxe-converter</module>
     </modules>
     <packaging>pom</packaging>
 
@@ -77,6 +79,15 @@
                             <exclude>org.jetbrains:annotations</exclude>
                         </excludes>
                     </artifactSet>
+                    <filters>
+                        <filter>
+                            <artifact>*:*</artifact>
+                            <excludes>
+                                <exclude>META-INF/**</exclude>
+<!--                                <exclude>META-INF/maven/**</exclude>-->
+                            </excludes>
+                        </filter>
+                    </filters>
                 </configuration>
                 <executions>
                     <execution>

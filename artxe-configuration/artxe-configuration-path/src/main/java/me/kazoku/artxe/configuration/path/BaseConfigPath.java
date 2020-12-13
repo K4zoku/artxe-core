@@ -25,15 +25,14 @@ public class BaseConfigPath<T> implements ConfigPath<T> {
    * @param def           the default value if it's not found
    * @param typeConverter how to convert the raw object to the needed type of value
    */
-  public BaseConfigPath(@NotNull final String path, @Nullable final T def, @NotNull final Function<Object, T> typeConverter) {
+  public BaseConfigPath(@NotNull final String path, @NotNull final T def, @NotNull final Function<Object, T> typeConverter) {
     this.path = path;
     this.def = def;
     this.typeConverter = typeConverter;
   }
 
   @Override
-  @Nullable
-  public final T getValue() {
+  public final @NotNull T getValue() {
     if (config == null) {
       return def;
     }

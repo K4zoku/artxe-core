@@ -262,11 +262,9 @@ public abstract class ModuleManager {
    */
   @Nullable
   public final Class<?> findClass(@NotNull final Module module, @NotNull final String name) {
-    for (final ModuleClassLoader loader : this.loaderMap.values()) {
-      if (this.loaderMap.containsKey(module)) {
-        continue;
-      }
-      final Class<?> clazz = loader.findClass(name, false);
+    for (final Map.Entry<Module, ModuleClassLoader> entry : this.loaderMap.entrySet()) {
+      if (entry.getKey().equals(module)) continue;
+      final Class<?> clazz = entry.getValue().findClass(name, false);
       if (clazz != null) {
         return clazz;
       }

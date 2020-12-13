@@ -11,12 +11,13 @@ import java.util.function.Predicate;
  */
 public class SimpleCommandNode implements CommandNode {
 
-    private final List<String> aliases;
-    private final List<String> permissions;
-    private final Predicate<String> match;
-    private final CommandExecutor execute;
+    private List<String> aliases;
+    private List<String> permissions;
+    private Predicate<String> match;
+    private CommandExecutor execute;
     private String label;
-    private final CommandFeedback feedback;
+    private CommandFeedback feedback;
+    private List<CommandNode> subcommands;
 
     /**
      * Create a {@link CommandNode} in simple way
@@ -32,6 +33,7 @@ public class SimpleCommandNode implements CommandNode {
         this.aliases = Collections.emptyList();
         this.execute = execute;
         this.feedback = new CommandFeedback();
+        this.subcommands = Collections.emptyList();
     }
 
     public SimpleCommandNode(Predicate<String> match, String permission, CommandExecutor execute) {
@@ -57,6 +59,7 @@ public class SimpleCommandNode implements CommandNode {
         this.aliases = aliases;
         this.execute = execute;
         this.feedback = new CommandFeedback();
+        this.subcommands = Collections.emptyList();
     }
 
     public SimpleCommandNode(String label, List<String> aliases, String permission, CommandExecutor execute) {
@@ -80,14 +83,26 @@ public class SimpleCommandNode implements CommandNode {
         return label;
     }
 
+    public void setLabel(String label) {
+        this.label = label;
+    }
+
     @Override
     public List<String> aliases() {
         return aliases;
     }
 
+    public void setAliases(List<String> aliases) {
+        this.aliases = aliases;
+    }
+
     @Override
     public List<String> permissions() {
         return permissions;
+    }
+
+    public void setPermissions(List<String> permissions) {
+        this.permissions = permissions;
     }
 
     @Override
@@ -97,13 +112,34 @@ public class SimpleCommandNode implements CommandNode {
         return matched;
     }
 
+    public void setMatch(Predicate<String> match) {
+        this.match = match;
+    }
+
     @Override
     public CommandFeedback feedback() {
         return this.feedback;
     }
 
+    public void setFeedback(CommandFeedback feedback) {
+        this.feedback = feedback;
+    }
+
     @Override
     public boolean execute(CommandSender sender, String label, String... args) {
         return execute.execute(sender, label, args);
+    }
+
+    public void setExecutor(CommandExecutor execute) {
+        this.execute = execute;
+    }
+
+    @Override
+    public List<CommandNode> subCommands() {
+        return subcommands;
+    }
+
+    public void setSubcommands(List<CommandNode> subcommands) {
+        this.subcommands = subcommands;
     }
 }
