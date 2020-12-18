@@ -1,4 +1,4 @@
-package me.kazoku.artxe.utils.time;
+package me.kazoku.artxe.converter.time.object;
 
 import java.util.*;
 

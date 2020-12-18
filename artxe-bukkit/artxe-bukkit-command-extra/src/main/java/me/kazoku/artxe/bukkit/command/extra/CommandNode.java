@@ -149,21 +149,28 @@ public interface CommandNode {
             }
         }
 
+        final CommandFeedback feedback = current.feedback();
+
         if (current.onlyPlayer() && !(sender instanceof Player)) {
-            current.feedback().ONLY_PLAYER.send(sender);
+            feedback.ONLY_PLAYER.send(sender);
             return false;
         }
 
         if (!current.permissions().isEmpty() && current.permissions().stream().noneMatch(sender::hasPermission)) {
-            current.feedback().NO_PERMISSION.send(sender);
+            feedback.NO_PERMISSION.send(sender);
             return false;
         }
 
         if (currentArgs.length > 0 && !current.consume()) {
-            current.feedback().TOO_MANY_ARGUMENTS.send(sender);
+            feedback.TOO_MANY_ARGUMENTS.send(sender);
             return false;
         }
 
-        return current.execute(sender, current.label(), currentArgs);
+        boolean success = current.execute(sender, current.label(), currentArgs);
+
+        if (success) feedback.COMMAND_SUCCESS.send(sender);
+        else feedback.COMMAND_FAILURE.send(sender);
+
+        return success;
     }
 }

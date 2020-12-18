@@ -1,5 +1,6 @@
-package me.kazoku.artxe.utils.time;
+package me.kazoku.artxe.converter.time.object;
 
+import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -33,8 +34,20 @@ public class Time {
         this.unit = unit;
     }
 
+    public Time getAndUpdate(Function<Double, Double> updateFunction) {
+        setValue(updateFunction.apply(getValue()));
+        return this;
+    }
+
+    public Time updateUnit(Unit updater) {
+        setUnit(updater);
+        return this;
+    }
+
     public String toString() {
-        return value + unit.toString();
+        String val = String.valueOf(value);
+        if (val.endsWith(".0")) val = String.valueOf(Math.round(value));
+        return val + unit.toString();
     }
 
     private static final Pattern PATTERN = Pattern.compile("(?<value>\\d*[.]\\d+|\\d+)(?<unit>.*)");

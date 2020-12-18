@@ -38,6 +38,7 @@ public class Feedback implements Cloneable {
     }
 
     public void send(CommandSender sender) {
-        sender.sendMessage(getFeedback());
+        String feedbackText = getFeedback();
+        if (!feedbackText.isEmpty()) sender.sendMessage(feedbackText);
     }
 }
