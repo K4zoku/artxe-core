@@ -20,13 +20,13 @@ public final class PathLoader {
    */
   public static <C extends Config> void loadPath(C config) {
     Arrays.stream(config.getClass().getDeclaredFields())
-      .filter(field -> ConfigPath.class.isAssignableFrom(field.getType()))
-      .forEach(field -> {
-        try {
-          ((ConfigPath<?>) field.get(config)).setConfig(config);
-        } catch (IllegalAccessException e) {
-          e.printStackTrace();
-        }
-      });
+        .filter(field -> ConfigPath.class.isAssignableFrom(field.getType()))
+        .forEach(field -> {
+          try {
+            ((ConfigPath<?>) field.get(config)).setConfig(config);
+          } catch (IllegalAccessException e) {
+            e.printStackTrace();
+          }
+        });
   }
 }

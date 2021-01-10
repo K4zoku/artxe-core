@@ -57,7 +57,6 @@ public abstract class ModulePath<T> {
    * Convert the type of the value from the module config file
    *
    * @param object the raw value from the module config file
-   *
    * @return the converted value
    */
   @Nullable
@@ -67,9 +66,7 @@ public abstract class ModulePath<T> {
    * Get the value from the module config file
    *
    * @param module the module
-   *
    * @return the value
-   *
    * @throws RequiredModulePathException if the path is required but is not found in the module config file
    */
   @Nullable
@@ -77,7 +74,7 @@ public abstract class ModulePath<T> {
     final FileConfiguration configuration = module.getInfo().getConfiguration();
     if (this.required && !configuration.isSet(this.path)) {
       throw new RequiredModulePathException(
-        this.path + " is not found in the module '" + module.getInfo().getName() + "'");
+          this.path + " is not found in the module '" + module.getInfo().getName() + "'");
     }
     final Object value = configuration.get(this.path);
     return value != null ? this.convertType(value) : null;

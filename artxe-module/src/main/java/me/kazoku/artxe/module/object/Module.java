@@ -174,7 +174,7 @@ public abstract class Module {
         try (final InputStream in = jar.getInputStream(jarConfig)) {
           if (in == null) {
             throw new IllegalArgumentException(
-              "The embedded resource '" + newPath + "' cannot be found");
+                "The embedded resource '" + newPath + "' cannot be found");
           }
           final File out = new File(this.getDataFolder(), newPath);
           out.getParentFile().mkdirs();
@@ -194,7 +194,6 @@ public abstract class Module {
    * Get the resource from the module's jar
    *
    * @param path path to resource
-   *
    * @return the InputStream of the resource, or null if it's not found
    */
   @Nullable

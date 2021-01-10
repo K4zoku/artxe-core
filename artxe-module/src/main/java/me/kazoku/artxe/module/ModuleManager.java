@@ -1,10 +1,9 @@
 package me.kazoku.artxe.module;
 
 import me.kazoku.artxe.configuration.general.ConfigProvider;
-import me.kazoku.artxe.module.object.ModuleInfo;
-
 import me.kazoku.artxe.module.object.Module;
 import me.kazoku.artxe.module.object.ModuleClassLoader;
+import me.kazoku.artxe.module.object.ModuleInfo;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -46,7 +45,7 @@ public abstract class ModuleManager {
    * Create a new module manager
    *
    * @param modulesDir the directory to store module files
-   * @param logger    the logger to use in every module
+   * @param logger     the logger to use in every module
    */
   protected ModuleManager(@NotNull final File modulesDir, @NotNull final Logger logger) {
     this.logger = logger;
@@ -73,36 +72,36 @@ public abstract class ModuleManager {
     final Map<String, Module> moduleMap = new HashMap<>();
     // Load the module files
     Arrays.stream(Objects.requireNonNull(this.modulesDir.listFiles()))
-      .filter(file -> file.isFile() && file.getName().endsWith(".jar"))
-      .forEach(file -> {
-        try (final JarFile jar = new JarFile(file)) {
-          // Get module description
-          final ModuleInfo moduleInfo = ModuleInfo.get(jar, this.getModuleConfigFileName(),
-            this.getConfigProvider());
-          if (moduleMap.containsKey(moduleInfo.getName())) {
-            this.logger.warning("Duplicated module " + moduleInfo.getName());
-            return;
+        .filter(file -> file.isFile() && file.getName().endsWith(".jar"))
+        .forEach(file -> {
+          try (final JarFile jar = new JarFile(file)) {
+            // Get module description
+            final ModuleInfo moduleInfo = ModuleInfo.get(jar, this.getModuleConfigFileName(),
+                this.getConfigProvider());
+            if (moduleMap.containsKey(moduleInfo.getName())) {
+              this.logger.warning("Duplicated module " + moduleInfo.getName());
+              return;
+            }
+            // Try to load the module
+            final ModuleClassLoader loader = new ModuleClassLoader(this, file, moduleInfo,
+                this.getClass().getClassLoader());
+            final Module module = loader.getModule();
+            if (this.onModuleLoading(module)) {
+              moduleMap.put(moduleInfo.getName(), loader.getModule());
+              this.loaderMap.put(module, loader);
+            } else {
+              loader.close();
+            }
+          } catch (final Exception e) {
+            this.logger.log(Level.WARNING, "Error when loading jar", e);
           }
-          // Try to load the module
-          final ModuleClassLoader loader = new ModuleClassLoader(this, file, moduleInfo,
-            this.getClass().getClassLoader());
-          final Module module = loader.getModule();
-          if (this.onModuleLoading(module)) {
-            moduleMap.put(moduleInfo.getName(), loader.getModule());
-            this.loaderMap.put(module, loader);
-          } else {
-            loader.close();
-          }
-        } catch (final Exception e) {
-          this.logger.log(Level.WARNING, "Error when loading jar", e);
-        }
-      });
+        });
     // Filter and sort the modules
     final Map<String, Module> sortedModuleMap = this.sortAndFilter(moduleMap);
     // Close ModuleClassLoader of remaining modules
     moduleMap.entrySet().stream()
-      .filter(entry -> !sortedModuleMap.containsKey(entry.getKey()))
-      .forEach(entry -> this.closeClassLoader(entry.getValue()));
+        .filter(entry -> !sortedModuleMap.containsKey(entry.getKey()))
+        .forEach(entry -> this.closeClassLoader(entry.getValue()));
     // Load the modules
     final Map<String, Module> finalModules = new LinkedHashMap<>();
     sortedModuleMap.forEach((key, module) -> {
@@ -128,7 +127,6 @@ public abstract class ModuleManager {
    *
    * @param name                the module name
    * @param closeLoaderOnFailed close the class loader if failed
-   *
    * @return whether it's enabled successfully
    */
   public final boolean enableModule(@NotNull final String name, final boolean closeLoaderOnFailed) {
@@ -150,7 +148,6 @@ public abstract class ModuleManager {
    *
    * @param name                the module name
    * @param closeLoaderOnFailed close the class loader if failed
-   *
    * @return whether it's disabled successfully
    */
   public final boolean disableModule(@NotNull final String name, final boolean closeLoaderOnFailed) {
@@ -177,7 +174,7 @@ public abstract class ModuleManager {
         failed.add(name);
       } else {
         this.logger.log(Level.INFO, "Enabled {0}",
-          String.join(" ", name, this.modulesMap.get(name).getInfo().getVersion()));
+            String.join(" ", name, this.modulesMap.get(name).getInfo().getVersion()));
       }
     });
     failed.forEach(this.modulesMap::remove);
@@ -204,7 +201,7 @@ public abstract class ModuleManager {
     this.modulesMap.keySet().forEach(name -> {
       if (this.disableModule(name, false)) {
         this.logger.log(Level.INFO, "Disabled {0}",
-          String.join(" ", name, this.modulesMap.get(name).getInfo().getVersion()));
+            String.join(" ", name, this.modulesMap.get(name).getInfo().getVersion()));
       }
     });
     this.modulesMap.values().forEach(this::closeClassLoader);
@@ -215,7 +212,6 @@ public abstract class ModuleManager {
    * Get the enabled module
    *
    * @param name the name of the module
-   *
    * @return the module, or null if it's not found
    */
   @Nullable
@@ -227,7 +223,6 @@ public abstract class ModuleManager {
    * Check if the module is loaded
    *
    * @param name the name of the module
-   *
    * @return whether it's loaded
    */
   public final boolean isModuleLoaded(@NotNull final String name) {
@@ -256,8 +251,7 @@ public abstract class ModuleManager {
    * Find a class for an module
    *
    * @param module the calling module
-   * @param name  the class name
-   *
+   * @param name   the class name
    * @return the class, or null if it's not found
    */
   @Nullable
@@ -286,7 +280,6 @@ public abstract class ModuleManager {
    * Filter and sort the order of the modules
    *
    * @param original the original map
-   *
    * @return the sorted and filtered map
    */
   @NotNull
@@ -306,7 +299,6 @@ public abstract class ModuleManager {
    * Called when the module is on loading
    *
    * @param module the loading module
-   *
    * @return whether the module is properly loaded
    */
   protected boolean onModuleLoading(@NotNull final Module module) {

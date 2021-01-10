@@ -7,60 +7,61 @@ import java.util.function.Supplier;
  * Feedback for {@link CommandNode}
  */
 public class CommandFeedback implements Cloneable {
-    /**
-     * Unknown command
-     */
-    public final Feedback INVALID_COMMAND;
+  /**
+   * Unknown command
+   */
+  public final Feedback INVALID_COMMAND;
 
-    /**
-     * Only the player can use the command
-     */
-    public final Feedback ONLY_PLAYER;
+  /**
+   * Only the player can use the command
+   */
+  public final Feedback ONLY_PLAYER;
 
-    /**
-     * No permission
-     */
-    public final Feedback NO_PERMISSION;
+  /**
+   * No permission
+   */
+  public final Feedback NO_PERMISSION;
 
-    /**
-     * Too many arguments for the command
-     */
-    public final Feedback TOO_MANY_ARGUMENTS;
+  /**
+   * Too many arguments for the command
+   */
+  public final Feedback TOO_MANY_ARGUMENTS;
 
-    /**
-     * Too few arguments for the command (Optional)
-     */
-    public final Feedback TOO_FEW_ARGUMENTS;
+  /**
+   * Too few arguments for the command (Optional)
+   */
+  public final Feedback TOO_FEW_ARGUMENTS;
 
-    /**
-     * Command success (Optional)
-     */
-    public final Feedback COMMAND_SUCCESS;
+  /**
+   * Command success (Optional)
+   */
+  public final Feedback COMMAND_SUCCESS;
 
-    /**
-     * Command failure (Optional)
-     */
-    public final Feedback COMMAND_FAILURE;
+  /**
+   * Command failure (Optional)
+   */
+  public final Feedback COMMAND_FAILURE;
 
-    public CommandFeedback() {
-        this.INVALID_COMMAND = new Feedback("§cUnknown command");
-        this.ONLY_PLAYER = new Feedback("§cOnly player can use this command");
-        this.NO_PERMISSION = new Feedback("§cYou don't have permission to do this");
-        this.TOO_MANY_ARGUMENTS = new Feedback("§cToo many arguments");
-        this.TOO_FEW_ARGUMENTS = new Feedback("§cToo few arguments");
-        this.COMMAND_SUCCESS = new Feedback("");
-        this.COMMAND_FAILURE = new Feedback("");
+  public CommandFeedback() {
+    this.INVALID_COMMAND = new Feedback("§cUnknown command");
+    this.ONLY_PLAYER = new Feedback("§cOnly player can use this command");
+    this.NO_PERMISSION = new Feedback("§cYou don't have permission to do this");
+    this.TOO_MANY_ARGUMENTS = new Feedback("§cToo many arguments");
+    this.TOO_FEW_ARGUMENTS = new Feedback("§cToo few arguments");
+    this.COMMAND_SUCCESS = new Feedback("");
+    this.COMMAND_FAILURE = new Feedback("");
+  }
+
+  @SafeVarargs
+  public CommandFeedback(Supplier<String>... suppliers) {
+    this();
+    Field[] fields = getClass().getDeclaredFields();
+    for (int i = 0; i < suppliers.length; i++) {
+      try {
+        ((Feedback) fields[i].get(this)).setFeedback(suppliers[i]);
+      } catch (IllegalAccessException ignore) {
+      }
     }
-
-    @SafeVarargs
-    public CommandFeedback(Supplier<String>... suppliers) {
-        this();
-        Field[] fields = getClass().getDeclaredFields();
-        for (int i = 0; i < suppliers.length; i++) {
-            try {
-                ((Feedback) fields[i].get(this)).setFeedback(suppliers[i]);
-            } catch (IllegalAccessException ignore) {}
-        }
 //        switch (suppliers.length) {
 //            case 0: throw new NullPointerException();
 //            default:
@@ -72,5 +73,5 @@ public class CommandFeedback implements Cloneable {
 //            case 2: ONLY_PLAYER.setFeedback(suppliers[1]);
 //            case 1: INVALID_COMMAND.setFeedback(suppliers[0]);
 //        }
-    }
+  }
 }

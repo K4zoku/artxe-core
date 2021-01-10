@@ -1,4 +1,5 @@
 name: Artxe
 version: ${project.version}
-authors: [kazoku]
+authors: [ kazoku ]
 main: me.kazoku.artxe.plugin.ArtxePlugin
+api-version: 1.13

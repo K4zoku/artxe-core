@@ -5,15 +5,15 @@ import java.util.Map;
 
 public abstract class Cache<K, V> {
 
-    protected Map<K, V> cacheMap;
+  protected Map<K, V> cacheMap;
 
-    public Cache() {
-        cacheMap = new LinkedHashMap<>();
-    }
+  public Cache() {
+    cacheMap = new LinkedHashMap<>();
+  }
 
-    protected abstract V create(K k);
+  protected abstract V create(K k);
 
-    protected V get(K k) {
-        return cacheMap.computeIfAbsent(k, this::create);
-    }
+  protected V get(K k) {
+    return cacheMap.computeIfAbsent(k, this::create);
+  }
 }

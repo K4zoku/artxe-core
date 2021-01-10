@@ -4,7 +4,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -33,7 +32,6 @@ public class CommandBuilder {
    * Create a new command builder
    *
    * @param name the command name
-   *
    * @return the command builder
    */
   @NotNull
@@ -57,8 +55,8 @@ public class CommandBuilder {
       @Override
       public List<String> tabComplete(CommandSender sender, String alias, String[] args) {
         return tabCompleter != null
-          ? tabCompleter.onTabComplete(sender, this, alias, args)
-          : super.tabComplete(sender, alias, args);
+            ? tabCompleter.onTabComplete(sender, this, alias, args)
+            : super.tabComplete(sender, alias, args);
       }
     };
 
@@ -74,7 +72,6 @@ public class CommandBuilder {
    * Set the description
    *
    * @param description the description
-   *
    * @return the command builder
    */
   @NotNull
@@ -87,7 +84,6 @@ public class CommandBuilder {
    * Set the usage
    *
    * @param usage the usage
-   *
    * @return the command builder
    */
   @NotNull
@@ -100,7 +96,6 @@ public class CommandBuilder {
    * Set the command executor
    *
    * @param executor the executor
-   *
    * @return the command builder
    */
   @NotNull
@@ -113,7 +108,6 @@ public class CommandBuilder {
    * Set the tab completer
    *
    * @param tabCompleter the tab completer
-   *
    * @return the command builder
    */
   @NotNull
@@ -126,7 +120,6 @@ public class CommandBuilder {
    * Set the permission of the command
    *
    * @param permission the permission
-   *
    * @return the command builder
    */
   @NotNull
@@ -139,7 +132,6 @@ public class CommandBuilder {
    * Set the message when the sender doesn't have the permission
    *
    * @param permissionMessage the message
-   *
    * @return the command builder
    */
   @NotNull

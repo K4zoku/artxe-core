@@ -42,11 +42,10 @@ public final class ModuleClassLoader extends URLClassLoader {
   /**
    * Create an Module Class Loader
    *
-   * @param moduleManager     the module manager
-   * @param file             the module jar
-   * @param moduleInfo the description for the module
-   * @param parent           the parent class loader
-   *
+   * @param moduleManager the module manager
+   * @param file          the module jar
+   * @param moduleInfo    the description for the module
+   * @param parent        the parent class loader
    * @throws MalformedURLException     if it cannot convert the file to its related URL
    * @throws IllegalAccessException    if it cannot create an instance of the main class of the
    *                                   module
@@ -58,8 +57,8 @@ public final class ModuleClassLoader extends URLClassLoader {
   public ModuleClassLoader(@NotNull final ModuleManager moduleManager, @NotNull final File file,
                            @NotNull final ModuleInfo moduleInfo,
                            @NotNull final ClassLoader parent)
-    throws MalformedURLException, IllegalAccessException, InvocationTargetException, InstantiationException,
-    NoSuchMethodException, ClassNotFoundException {
+      throws MalformedURLException, IllegalAccessException, InvocationTargetException, InstantiationException,
+      NoSuchMethodException, ClassNotFoundException {
     super(new URL[]{file.toURI().toURL()}, parent);
     this.moduleManager = moduleManager;
     this.file = file;
@@ -89,7 +88,6 @@ public final class ModuleClassLoader extends URLClassLoader {
    *
    * @param name   the class name
    * @param global whether it'll try to search globally
-   *
    * @return the class, or null if it's not found
    */
   @Nullable

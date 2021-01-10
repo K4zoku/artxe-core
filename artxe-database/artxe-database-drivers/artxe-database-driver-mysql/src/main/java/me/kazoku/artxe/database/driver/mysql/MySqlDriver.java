@@ -8,13 +8,13 @@ import me.kazoku.artxe.database.general.Setting;
  */
 public class MySqlDriver implements Driver {
 
-    @Override
-    public String getClassName() {
-        return "com.mysql.cj.jdbc.Driver";
-    }
+  @Override
+  public String getClassName() {
+    return "com.mysql.cj.jdbc.Driver";
+  }
 
-    @Override
-    public String convertURL(Setting setting) {
-        return "jdbc:mysql://" + setting.getHost() + ':' + setting.getPort() + '/' + setting.getDatabaseName();
-    }
+  @Override
+  public String convertURL(Setting setting) {
+    return "jdbc:mysql://" + setting.getHost() + ':' + setting.getPort() + '/' + setting.getDatabaseName();
+  }
 }

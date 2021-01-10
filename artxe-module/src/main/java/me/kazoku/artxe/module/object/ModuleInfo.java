@@ -59,18 +59,16 @@ public final class ModuleInfo {
   /**
    * Generate the module description
    *
-   * @param jar                 the module jar
+   * @param jar                  the module jar
    * @param moduleConfigFileName the name of the module config file
-   * @param provider            the config provider
-   *
+   * @param provider             the config provider
    * @return the module description
-   *
    * @throws IOException if there is an error when loading the module jar
    */
   @NotNull
   public static ModuleInfo get(@NotNull final JarFile jar, @NotNull final String moduleConfigFileName,
                                @NotNull final ConfigProvider<? extends FileConfiguration> provider)
-    throws IOException {
+      throws IOException {
     // Load the module config file
     final JarEntry entry = jar.getJarEntry(moduleConfigFileName);
     if (entry == null) {
@@ -85,15 +83,15 @@ public final class ModuleInfo {
     final String mainClass = data.getString("main");
     if (name == null) {
       throw new RequiredModulePathException("Module '" + jar.getName() + "' doesn't have a name on " +
-        moduleConfigFileName);
+          moduleConfigFileName);
     }
     if (version == null) {
       throw new RequiredModulePathException("Module '" + jar.getName() + "' doesn't have a version on " +
-        moduleConfigFileName);
+          moduleConfigFileName);
     }
     if (mainClass == null) {
       throw new RequiredModulePathException("Module '" + jar.getName() + "' doesn't have a main class on " +
-        moduleConfigFileName);
+          moduleConfigFileName);
     }
     return new ModuleInfo(name, version, mainClass, data);
   }

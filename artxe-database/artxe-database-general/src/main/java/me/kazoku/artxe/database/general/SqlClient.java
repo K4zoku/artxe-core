@@ -16,7 +16,6 @@ public interface SqlClient<T> extends Client<T> {
    * Get the connection
    *
    * @return the connection
-   *
    * @throws SQLException if there is an SQL error
    */
   Connection getConnection() throws SQLException;
@@ -25,9 +24,7 @@ public interface SqlClient<T> extends Client<T> {
    * Query from the connection
    *
    * @param command the query command
-   *
    * @return the result set
-   *
    * @throws SQLException if there is an SQL error
    */
   default ResultSet query(String command) throws SQLException {
@@ -43,7 +40,6 @@ public interface SqlClient<T> extends Client<T> {
    * Execute the commands
    *
    * @param command the command
-   *
    * @throws SQLException if there is an SQL error
    */
   default void execute(String... command) throws SQLException {

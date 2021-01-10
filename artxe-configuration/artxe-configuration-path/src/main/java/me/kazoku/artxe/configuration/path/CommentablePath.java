@@ -55,14 +55,14 @@ public class CommentablePath<T> implements ConfigPath<T> {
   public void setConfig(@NotNull final Config config) {
     originalPath.setConfig(config);
     Optional.of(config.getConfig())
-            .filter(Commentable.class::isInstance)
-            .map(Commentable.class::cast)
-            .ifPresent(configuration ->
-              defaultCommentMap.forEach((type, comment) -> {
-                if (configuration.getComment(getPath(), type) == null)
-                  configuration.setComment(getPath(), comment, type);
-              })
-            );
+        .filter(Commentable.class::isInstance)
+        .map(Commentable.class::cast)
+        .ifPresent(configuration ->
+            defaultCommentMap.forEach((type, comment) -> {
+              if (configuration.getComment(getPath(), type) == null)
+                configuration.setComment(getPath(), comment, type);
+            })
+        );
   }
 
   /**
@@ -88,17 +88,16 @@ public class CommentablePath<T> implements ConfigPath<T> {
    * Get the comment
    *
    * @param commentType the comment type
-   *
    * @return the comment
    */
   @Nullable
   public String getComment(@NotNull final CommentType commentType) {
     return Optional.ofNullable(getConfig())
-      .map(Config::getConfig)
-      .filter(Commentable.class::isInstance)
-      .map(Commentable.class::cast)
-      .map(config -> config.getComment(getPath(), commentType))
-      .orElse(defaultCommentMap.get(commentType));
+        .map(Config::getConfig)
+        .filter(Commentable.class::isInstance)
+        .map(Commentable.class::cast)
+        .map(config -> config.getComment(getPath(), commentType))
+        .orElse(defaultCommentMap.get(commentType));
   }
 
   /**
@@ -109,9 +108,9 @@ public class CommentablePath<T> implements ConfigPath<T> {
    */
   public void setComment(@NotNull final CommentType commentType, @Nullable final String comment) {
     Optional.ofNullable(getConfig())
-      .map(Config::getConfig)
-      .filter(Commentable.class::isInstance)
-      .map(Commentable.class::cast)
-      .ifPresent(config -> config.setComment(getPath(), comment, commentType));
+        .map(Config::getConfig)
+        .filter(Commentable.class::isInstance)
+        .map(Commentable.class::cast)
+        .ifPresent(config -> config.setComment(getPath(), comment, commentType));
   }
 }

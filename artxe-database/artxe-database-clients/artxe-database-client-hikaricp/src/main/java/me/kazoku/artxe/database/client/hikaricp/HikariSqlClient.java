@@ -2,7 +2,10 @@ package me.kazoku.artxe.database.client.hikaricp;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
-import me.kazoku.artxe.database.general.*;
+import me.kazoku.artxe.database.general.Driver;
+import me.kazoku.artxe.database.general.LocalDriver;
+import me.kazoku.artxe.database.general.Setting;
+import me.kazoku.artxe.database.general.SqlClient;
 
 import java.sql.Connection;
 import java.sql.SQLException;
