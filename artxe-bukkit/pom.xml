@@ -18,6 +18,7 @@
         <module>artxe-bukkit-chat</module>
         <module>artxe-bukkit-all</module>
         <module>artxe-bukkit-moon</module>
+        <module>artxe-bukkit-plugin-shell</module>
     </modules>
 
     <repositories>

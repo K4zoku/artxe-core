@@ -6,7 +6,7 @@ package me.kazoku.artxe.database.general;
 public class Setting {
   private String host = "localhost";
   private String databaseName = "db";
-  private String port = "3306";
+  private int port = 3306;
   private String username = "";
   private String password = "";
   private boolean useSSL = false;
@@ -55,7 +55,7 @@ public class Setting {
    *
    * @return the port
    */
-  public String getPort() {
+  public int getPort() {
     return port;
   }
 
@@ -64,7 +64,7 @@ public class Setting {
    *
    * @param port the port
    */
-  public Setting setPort(String port) {
+  public Setting setPort(int port) {
     this.port = port;
     return this;
   }

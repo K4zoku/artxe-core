@@ -14,7 +14,7 @@
     <dependencies>
         <dependency>
             <groupId>me.kazoku</groupId>
-            <artifactId>artxe-config-general</artifactId>
+            <artifactId>artxe-configuration-general</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>
