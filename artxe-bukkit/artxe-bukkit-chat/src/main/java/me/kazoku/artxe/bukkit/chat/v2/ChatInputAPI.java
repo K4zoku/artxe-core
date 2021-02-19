@@ -56,7 +56,10 @@ public class ChatInputAPI {
   private static void onChat(AsyncPlayerChatEvent event) {
     final UUID playerId = event.getPlayer().getUniqueId();
 
+    if (!HANDLERS_MAP.containsKey(playerId)) return;
+
     ChatInputAPI chain = HANDLERS_MAP.get(playerId);
+
     while (chain.isCompleted() && chain.hasNext()) {
       chain = chain.next;
     }
