@@ -4,7 +4,6 @@ import org.bukkit.event.Event;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
-import org.bukkit.plugin.EventExecutor;
 import org.bukkit.plugin.IllegalPluginAccessException;
 import org.bukkit.plugin.Plugin;
 
@@ -17,8 +16,6 @@ public final class EventHandlerManager {
 
   private final Map<Class<? extends Event>, IndexedListenerMap> manager;
   private final Plugin plugin;
-
-  private final EventExecutor EXECUTOR = this::executor;
 
   private EventHandlerManager(Plugin plugin) {
     manager = new HashMap<>();
@@ -41,7 +38,7 @@ public final class EventHandlerManager {
     AdvancedListener listener = new AdvancedListener(eventClass, eventHandler);
     UUID uuid = UUID.randomUUID();
     plugin.getServer().getPluginManager()
-        .registerEvent(eventClass, listener, priority, EXECUTOR, plugin);
+        .registerEvent(eventClass, listener, priority, this::executor, plugin);
     manager.get(eventClass).put(uuid, listener);
     return uuid;
   }
@@ -104,7 +101,7 @@ public final class EventHandlerManager {
 
   private static class IndexedListenerMap extends HashMap<UUID, AdvancedListener> {
 
-    private IndexedListenerMap(Class<? extends Event> eventClass) {
+    private IndexedListenerMap(Object... o) {
       super();
     }
 
