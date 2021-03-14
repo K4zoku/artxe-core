@@ -5,6 +5,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.EventExecutor;
+import org.bukkit.plugin.IllegalPluginAccessException;
 import org.bukkit.plugin.Plugin;
 
 import java.util.*;
@@ -34,7 +35,7 @@ public final class EventHandlerManager {
 
   public <E extends Event> UUID addEventHandler(Class<E> eventClass, EventPriority priority, Consumer<E> eventHandler) {
     if (!EventClassValidate.test(eventClass))
-      throw new RuntimeException("Class " + eventClass.getSimpleName() + " is not valid event class");
+      throw new IllegalPluginAccessException("Unable to find handler list for event " + eventClass.getName() + ". Static getHandlerList method required!");
     manager.computeIfAbsent(eventClass, IndexedListenerMap::new);
 
     AdvancedListener listener = new AdvancedListener(eventClass, eventHandler);

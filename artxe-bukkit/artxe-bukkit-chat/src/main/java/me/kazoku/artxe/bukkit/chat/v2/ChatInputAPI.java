@@ -130,7 +130,7 @@ public class ChatInputAPI {
       completed = true;
     } else {
       onFalse.accept(message);
-      completed = stopOnFailure;
+      if (completed = stopOnFailure) this.next = null;
     }
   }
 
